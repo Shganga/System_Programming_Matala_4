@@ -1,3 +1,4 @@
+#yanivg1000@gmail.com
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Werror
 VALGRIND = valgrind --leak-check=full --track-origins=yes

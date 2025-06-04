@@ -48,6 +48,7 @@ public:
         using iterator = typename std::vector<T>::const_iterator;
 
         AscendingOrder(const MyContainer<T>& container) {
+            if (container.size() == 0) return;
             sortedData = container.data;
             std::sort(sortedData.begin(), sortedData.end());
         }
@@ -65,6 +66,7 @@ public:
 
         DescendingOrder(const MyContainer<T>& container) {
             sortedData = container.data;
+            if (sortedData.empty()) return;
             std::sort(sortedData.begin(), sortedData.end(), std::greater<T>());
         }
 
@@ -83,6 +85,7 @@ public:
 
         SideCrossOrder(const MyContainer<T>& container) {
             std::vector<T> sorted = container.data;
+            if (sorted.empty()) return;
             std::sort(sorted.begin(), sorted.end());
 
             size_t left = 0;
@@ -113,6 +116,7 @@ public:
 
         ReverseOrder(const MyContainer<T>& container) {
             reversedData = container.data;
+            if (reversedData.empty()) return;
             std::reverse(reversedData.begin(), reversedData.end());
         }
 
@@ -158,10 +162,23 @@ public:
             iterator begin() const { return ordered.begin(); }
             iterator end() const { return ordered.end(); }
     };
+    class Order {
+        private:
+            const std::vector<T>& refData;
+    
+        public:
+            using iterator = typename std::vector<T>::const_iterator;
+    
+            Order(const MyContainer<T>& container) : refData(container.data) {}
+    
+            iterator begin() const { return refData.begin(); }
+            iterator end() const { return refData.end(); }
+        };
         
     AscendingOrder ascending_order() const { return AscendingOrder(*this); }
     DescendingOrder descending_order() const { return DescendingOrder(*this); }
     SideCrossOrder side_cross_order() const { return SideCrossOrder(*this); }
     ReverseOrder reverse_order() const { return ReverseOrder(*this); }
     MiddleOutOrder middle_out_order() const { return MiddleOutOrder(*this); }
+    Order order() const { return Order(*this); }
 };

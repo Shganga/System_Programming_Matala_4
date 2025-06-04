@@ -11,6 +11,12 @@ int main() {
 
     std::cout << "Size of container: " << container.size() << std::endl;
 
+    std::cout << "Order: ";
+    for (const auto& x : container.order()) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
     std::cout << "Ascending: ";
     for (const auto& x : container.ascending_order()) {
         std::cout << x << ' ';

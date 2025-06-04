@@ -5,8 +5,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-template<typename T = int> 
-
+template<typename T = int>
 class MyContainer {
 private:
     std::vector<T> data;
@@ -40,99 +39,129 @@ public:
         return os;
     }
 
-class AscendingOrder {
+
+    class AscendingOrder {
     private:
         std::vector<T> sortedData;
-        typename std::vector<T>::iterator it;
 
     public:
-        AscendingOrder(const MyContainer& container) {
+        using iterator = typename std::vector<T>::const_iterator;
+
+        AscendingOrder(const MyContainer<T>& container) {
             sortedData = container.data;
             std::sort(sortedData.begin(), sortedData.end());
-            it = sortedData.begin();
         }
 
-        typename std::vector<T>::iterator begin() {
-            return sortedData.begin();
-        }
+        iterator begin() const { return sortedData.begin(); }
+        iterator end() const { return sortedData.end(); }
+    };
 
-        typename std::vector<T>::iterator end() {
-            return sortedData.end();
-        }
-};
-
-class DescendingOrder {
+    class DescendingOrder {
     private:
         std::vector<T> sortedData;
 
     public:
-        DescendingOrder(const MyContainer<T>& container) : sortedData(container.data) {
+        using iterator = typename std::vector<T>::const_iterator;
+
+        DescendingOrder(const MyContainer<T>& container) {
+            sortedData = container.data;
             std::sort(sortedData.begin(), sortedData.end(), std::greater<T>());
         }
 
-        typename std::vector<T>::const_iterator begin() const {
-            return sortedData.begin();
-        }
+        iterator begin() const { return sortedData.begin(); }
+        iterator end() const { return sortedData.end(); }
+    };
 
-        typename std::vector<T>::const_iterator end() const {
-            return sortedData.end();
-        }
-};
 
-class SideCrossOrder {
+
+    class SideCrossOrder {
     private:
         std::vector<T> ordered;
-    
+
     public:
+        using iterator = typename std::vector<T>::const_iterator;
+
         SideCrossOrder(const MyContainer<T>& container) {
             std::vector<T> sorted = container.data;
             std::sort(sorted.begin(), sorted.end());
-    
+
             size_t left = 0;
             size_t right = sorted.size() - 1;
-    
+
             while (left <= right) {
                 if (left == right) {
                     ordered.push_back(sorted[left]);
-                    break;
+                } else {
+                    ordered.push_back(sorted[left]);
+                    ordered.push_back(sorted[right]);
                 }
-                ordered.push_back(sorted[left]);
-                ordered.push_back(sorted[right]);
                 ++left;
-                --right;
+                if (right > 0) --right;
             }
         }
-    
-        typename std::vector<T>::const_iterator begin() const {
-            return ordered.begin();
-        }
-    
-        typename std::vector<T>::const_iterator end() const {
-            return ordered.end();
-        }
+
+        iterator begin() const { return ordered.begin(); }
+        iterator end() const { return ordered.end(); }
     };
 
-class ReverseOrder {
+    class ReverseOrder {
     private:
         std::vector<T> reversedData;
-    
+
     public:
-        ReverseOrder(const MyContainer<T>& container) : reversedData(container.data) {
+        using iterator = typename std::vector<T>::const_iterator;
+
+        ReverseOrder(const MyContainer<T>& container) {
+            reversedData = container.data;
             std::reverse(reversedData.begin(), reversedData.end());
         }
-    
-        typename std::vector<T>::const_iterator begin() const {
-            return reversedData.begin();
-        }
-    
-        typename std::vector<T>::const_iterator end() const {
-            return reversedData.end();
-        }
+
+        iterator begin() const { return reversedData.begin(); }
+        iterator end() const { return reversedData.end(); }
+    };
+
+
+    class MiddleOutOrder {
+        private:
+            std::vector<T> ordered;
+        
+        public:
+            using iterator = typename std::vector<T>::const_iterator;
+        
+            MiddleOutOrder(const MyContainer<T>& container) {
+                const std::vector<T>& data = container.data;
+                size_t n = data.size();
+                if (n == 0) return;
+        
+                // בוחרים אינדקס אמצעי (כאן עיגול כלפי מטה)
+                size_t mid = n / 2;
+        
+                ordered.push_back(data[mid]);
+        
+                // מצביעים שמאלה וימינה מהאמצע
+                int left = static_cast<int>(mid) - 1;
+                int right = static_cast<int>(mid) + 1;
+        
+                // לסרוק לסירוגין משמאל ומימין כל עוד יש איברים
+                while (left >= 0 || right < (int)n) {
+                    if (left >= 0) {
+                        ordered.push_back(data[left]);
+                        --left;
+                    }
+                    if (right < (int)n) {
+                        ordered.push_back(data[right]);
+                        ++right;
+                    }
+                }
+            }
+        
+            iterator begin() const { return ordered.begin(); }
+            iterator end() const { return ordered.end(); }
     };
         
-    
+    AscendingOrder ascending_order() const { return AscendingOrder(*this); }
+    DescendingOrder descending_order() const { return DescendingOrder(*this); }
+    SideCrossOrder side_cross_order() const { return SideCrossOrder(*this); }
+    ReverseOrder reverse_order() const { return ReverseOrder(*this); }
+    MiddleOutOrder middle_out_order() const { return MiddleOutOrder(*this); }
 };
-
-
-
-

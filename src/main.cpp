@@ -1,66 +1,45 @@
-#include <iostream>
 #include "MyContainer.hpp"
+#include <iostream>
 
 int main() {
-    try {
-        // יצירת קונטיינר של מספרים שלמים
-        MyContainer<int> mc;
+    MyContainer<int> container;
+    container.add(7);
+    container.add(15);
+    container.add(6);
+    container.add(1);
+    container.add(2);
 
-        // הוספת איברים
-        mc.add(7);
-        mc.add(15);
-        mc.add(6);
-        mc.add(1);
-        mc.add(2);
+    std::cout << "Size of container: " << container.size() << std::endl;
 
-        std::cout << "Original container: " << mc << std::endl;
-        std::cout << "Size: " << mc.size() << std::endl;
-
-        // הדפסה לפי סדר עולה
-        std::cout << "Ascending order: ";
-        MyContainer<int>::AscendingOrder asc(mc);
-        for (auto val : asc) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
-
-        // הדפסה לפי סדר יורד
-        std::cout << "Descending order: ";
-        MyContainer<int>::DescendingOrder desc(mc);
-        for (auto val : desc) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
-
-        //sideCross
-        std::cout << "SideCrossOrder order: ";
-        MyContainer<int>::SideCrossOrder side(mc);
-        for (auto val : side) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
-
-        // הדפסה לפי ReverseOrder
-        std::cout << "Reverse order: ";
-        MyContainer<int>::ReverseOrder rev(mc);
-        for (auto val : rev) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
-
-        
-
-        // ניסיון למחוק איבר קיים
-        mc.remove(6);
-        std::cout << "After removing 6: " << mc << std::endl;
-
-        // ניסיון למחוק איבר שלא קיים
-        std::cout << "Trying to remove 99 (not in container):" << std::endl;
-        mc.remove(99);  // אמור לזרוק שגיאה
-
-    } catch (const std::exception& e) {
-        std::cerr << "Caught exception: " << e.what() << std::endl;
+    std::cout << "Ascending: ";
+    for (const auto& x : container.ascending_order()) {
+        std::cout << x << ' ';
     }
+    std::cout << std::endl;
+
+    std::cout << "Descending: ";
+    for (const auto& x : container.descending_order()) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
+    std::cout << "Side Cross: ";
+    for (const auto& x : container.side_cross_order()) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
+    std::cout << "Reverse: ";
+    for (const auto& x : container.reverse_order()) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
+
+    std::cout << "Middle Out: ";
+    for (const auto& x : container.middle_out_order()) {
+        std::cout << x << ' ';
+    }
+    std::cout << std::endl;
 
     return 0;
 }

@@ -276,3 +276,39 @@ TEST_CASE("MiddleOut Iterator Tests") {
         CHECK(result == expected);
     }
 }
+
+TEST_CASE("Equel Test"){
+    MyContainer<int> container;
+    container.add(7);
+    container.add(15);
+    container.add(6);
+    container.add(1);
+    container.add(2);
+    std::vector<int> asc_result;
+    for (auto it = container.begin_asc(); it != container.end_asc(); ++it) {
+        asc_result.push_back(*it);
+    }
+    std::vector<int> dec_result;
+    for (auto it = container.begin_desc(); it != container.end_desc(); ++it) {
+        dec_result.push_back(*it);
+    }
+    std::vector<int> side_result;
+    for (auto it = container.begin_sidecross(); it != container.end_sidecross(); ++it) {
+        side_result.push_back(*it);
+    }
+    std::vector<int> rev_result;
+    for (auto it = container.begin_reverse(); it != container.end_reverse(); ++it) {
+        rev_result.push_back(*it);
+    }
+    std::vector<int> result;
+    for (auto it = container.begin_order(); it != container.end_order(); ++it) {
+        result.push_back(*it);
+    }
+
+    CHECK(result != rev_result);
+    CHECK(result != asc_result);
+    CHECK(result != dec_result);
+    CHECK(asc_result != side_result);
+    CHECK(rev_result != side_result);
+    CHECK(dec_result != side_result);
+}

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+using namespace MyContainerNS;
+
 int main() {
     MyContainer<> container;
     container.add(7);

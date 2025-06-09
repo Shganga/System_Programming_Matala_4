@@ -244,7 +244,6 @@ TEST_CASE("MiddleOut Iterator Tests") {
         for (auto it = container.begin_middleout(); it != container.end_middleout(); ++it) {
             result.push_back(*it);
         }
-        
         CHECK(result == expected);
     }
     SUBCASE("IntegerElementsEven") {
@@ -253,13 +252,11 @@ TEST_CASE("MiddleOut Iterator Tests") {
         container.add(2);
         container.add(3);
         container.add(4);
-        // middle out order for even count, example: 2 1 3 4
-        
+        // middle out order for even count, example: 3 2 4 1
         std::vector<int> expected = {3, 2, 4, 1};
         std::vector<int> result;
         for (auto it = container.begin_middleout(); it != container.end_middleout(); ++it) {
             result.push_back(*it);
-            std::cout << *it << ' ';
         }
         CHECK(result == expected);
     }
@@ -277,6 +274,93 @@ TEST_CASE("MiddleOut Iterator Tests") {
         }
         CHECK(result == expected);
     }
+}
+
+TEST_CASE("Remove and Exception Tests") {
+    MyContainer<int> container;
+    container.add(1);
+    container.add(2);
+    container.add(3);
+    CHECK(container.size() == 3);
+    container.remove(2);
+    CHECK(container.size() == 2);
+    std::vector<int> expected = {1, 3};
+    std::vector<int> result;
+    for (auto it = container.begin_order(); it != container.end_order(); ++it) {
+        result.push_back(*it);
+    }
+    CHECK(result == expected);
+    CHECK_THROWS_AS(container.remove(42), std::invalid_argument);
+}
+
+TEST_CASE("Multiple Iterators Independence") {
+    MyContainer<int> container;
+    for (int i = 1; i <= 5; ++i) container.add(i);
+    auto it1 = container.begin_asc();
+    auto it2 = container.begin_desc();
+    CHECK(*it1 == 1);
+    CHECK(*it2 == 5);
+    ++it1;
+    ++it2;
+    CHECK(*it1 == 2);
+    CHECK(*it2 == 4);
+}
+
+TEST_CASE("Iterator Post-Increment Behavior") {
+    MyContainer<int> container;
+    container.add(10);
+    container.add(20);
+    auto it = container.begin_asc();
+    auto it2 = it++;
+    CHECK(*it2 == 10);
+    CHECK(*it == 20);
+}
+
+TEST_CASE("Iterator Pre-Increment Behavior") {
+    MyContainer<int> container;
+    container.add(100);
+    container.add(200);
+    auto it = container.begin_desc();
+    ++it;
+    CHECK(*it == 100);
+}
+
+TEST_CASE("Iterator Comparison Edge Cases") {
+    MyContainer<int> container;
+    container.add(1);
+    container.add(2);
+    auto it1 = container.begin_asc();
+    auto it2 = container.begin_asc();
+    CHECK(it1 == it2);
+    ++it1;
+    CHECK(it1 != it2);
+    ++it2;
+    CHECK(it1 == it2);
+}
+
+TEST_CASE("ReverseOrder Iterator Past End") {
+    MyContainer<int> container;
+    container.add(1);
+    auto it = container.begin_reverse();
+    ++it;
+    CHECK(it == container.end_reverse());
+    CHECK_THROWS_AS(*it, std::out_of_range);
+}
+
+TEST_CASE("MiddleOutOrder Odd/Even Edge") {
+    MyContainer<int> container;
+    container.add(1);
+    container.add(2);
+    container.add(3);
+    container.add(4);
+    container.add(5);
+    container.add(6);
+    std::vector<int> expected = {4, 3, 5, 2, 6, 1};
+    std::vector<int> result;
+    for (auto it = container.begin_middleout(); it != container.end_middleout(); ++it) {
+        result.push_back(*it);
+    }
+    CHECK(result == expected);
 }
 
 TEST_CASE("Equel Test"){

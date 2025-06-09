@@ -13,6 +13,8 @@
 #include "MiddleOutOrder.hpp"
 #include "Order.hpp"
 
+namespace MyContainerNS{
+
 template<typename T = int>
 class MyContainer {
 private:
@@ -179,5 +181,5 @@ public:
         return Order<T>(*this, data.size());
     }
 
-
-};
+    };
+}

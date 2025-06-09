@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <stdexcept>
 
+namespace MyContainerNS{
+
+
 template<typename T>
 class MyContainer;
 
@@ -86,3 +89,4 @@ public:
         return !(*this == other);
     }
 };
+}

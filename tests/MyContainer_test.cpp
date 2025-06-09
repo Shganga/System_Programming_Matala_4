@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+using namespace MyContainerNS;
+
 TEST_CASE("Ascending Iterator Tests") {
     SUBCASE("EmptyContainer") {
         MyContainer<int> container;
